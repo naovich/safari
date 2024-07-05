@@ -8,8 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import Image from "next/image";
-import { time } from "console";
+
 import {
   BarbecueIcon,
   BuoyIcon,
@@ -18,6 +17,7 @@ import {
   PaddleIcon,
   SeaIcon,
 } from "@/assets/icons";
+import NumericStepper from "@/components/ui/numericStepper";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -25,6 +25,7 @@ export default function Devis() {
   const [departureDate, setDepartureDate] = useState<Date | undefined>(
     undefined,
   );
+  const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
 
   const activities = [
     {
@@ -170,7 +171,13 @@ export default function Devis() {
               onClick={() => toggleActivity(activity.name)}
             >
               {activity.icon && (
-                <activity.icon className="m-auto h-24 w-24 text-blue-500" />
+                <activity.icon
+                  className={`m-auto h-24 w-24 ${
+                    selectedActivities.includes(activity.name)
+                      ? "text-blue-500"
+                      : "text-blue-400"
+                  }`}
+                />
               )}
               <div className="mt-2 flex w-full justify-center">
                 <input
@@ -196,8 +203,17 @@ export default function Devis() {
         </div>
       </div>
       <div className="mt-6">
+        <Label htmlFor="guests">Number of Guests</Label>
+        <NumericStepper
+          min={1}
+          max={10}
+          value={numberOfGuests}
+          onChange={setNumberOfGuests}
+        />
+      </div>
+      <div className="mt-6">
         <h3 className="text-lg font-bold">Selected Activities:</h3>
-        <ul className="list-disc pl-5">
+        <ul className="list-disc space-y-2 pl-5">
           {selectedActivities.map((activity, index) => (
             <li key={index} className="flex items-center justify-between">
               <span>{activity}</span>
