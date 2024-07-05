@@ -8,16 +8,11 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-
-import {
-  BarbecueIcon,
-  BuoyIcon,
-  CanoeIcon,
-  MountainIcon,
-  PaddleIcon,
-  SeaIcon,
-} from "@/assets/icons";
 import NumericStepper from "@/components/ui/numericStepper";
+import { Input } from "@/components/ui/input"; // Importation de l'input
+
+import { CalendarDaysIcon } from "@/assets/icons";
+import { activitiesDevis } from "@/lib/labels";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -25,69 +20,141 @@ export default function Devis() {
   const [departureDate, setDepartureDate] = useState<Date | undefined>(
     undefined,
   );
-  const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
+  const [activityGuests, setActivityGuests] = useState<{
+    [key: string]: number;
+  }>({});
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
 
-  const activities = [
-    {
-      name: "Journée en mer",
-      image: "/images/dauphins.jpg",
-      time: 60,
-      price: 20,
-      icon: SeaIcon,
-    },
-    {
-      name: "Ascension du karthala",
-      image: "/images/dauphins.jpg",
-      time: 60,
-      price: 20,
-      icon: MountainIcon,
-    },
-    {
-      name: "Barbecue",
-      image: "/images/dauphins.jpg",
-      time: 60,
-      price: 20,
-      icon: BarbecueIcon,
-    },
-    {
-      name: "Bouée tractée",
-      image: "/images/dauphins.jpg",
-      time: 60,
-      price: 20,
-      icon: BuoyIcon,
-    },
-    {
-      name: "Paddle",
-      image: "/images/dauphins.jpg",
-      time: 60,
-      price: 20,
-      icon: PaddleIcon,
-    },
-    {
-      name: "Canoë",
-      image: "/images/dauphins.jpg",
-      time: 30,
-      price: 20,
-      icon: CanoeIcon,
-    },
-  ];
+  const activities = activitiesDevis;
+
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const canSubmit =
+    arrivalDate &&
+    departureDate &&
+    selectedActivities.length > 0 &&
+    firstName &&
+    lastName &&
+    isValidEmail(email);
 
   const toggleActivity = (activity: string) => {
     if (selectedActivities.includes(activity)) {
       setSelectedActivities(
         selectedActivities.filter((act) => act !== activity),
       );
+      setActivityGuests((prev) => {
+        const updated = { ...prev };
+        delete updated[activity];
+        return updated;
+      });
     } else {
       setSelectedActivities([...selectedActivities, activity]);
+      setActivityGuests((prev) => ({ ...prev, [activity]: 1 }));
     }
   };
 
   const removeActivity = (activity: string) => {
     setSelectedActivities(selectedActivities.filter((act) => act !== activity));
+    setActivityGuests((prev) => {
+      const updated = { ...prev };
+      delete updated[activity];
+      return updated;
+    });
+  };
+
+  const handleGuestChange = (activity: string, guests: number) => {
+    setActivityGuests((prev) => ({ ...prev, [activity]: guests }));
+  };
+
+  const calculateTotal = () => {
+    return selectedActivities.reduce(
+      (total, activity) =>
+        total +
+        activities.find((act) => act.name === activity)!.price *
+          activityGuests[activity],
+      0,
+    );
+  };
+
+  const handleSubmit = async () => {
+    const data = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      arrivalDate,
+      departureDate,
+      selectedActivities,
+      activityGuests,
+    };
+
+    try {
+      const response = await fetch("/api/reserve", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6 md:p-8">
+      <h2 className="mb-4 text-2xl font-bold">
+        Réservez gratuitement vos activités
+      </h2>
+      <div className="mb-6 grid gap-2">
+        <Label htmlFor="first-name">Prénom</Label>
+        <Input
+          type="text"
+          id="first-name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First Name"
+        />
+        <Label htmlFor="last-name">Nom</Label>
+        <Input
+          type="text"
+          id="last-name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Last Name"
+        />
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        {!isValidEmail(email) && email && (
+          <p className="text-red-500">Adresse email invalide</p>
+        )}
+        <Label htmlFor="phone">Phone</Label>
+        <Input
+          type="tel"
+          id="phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Phone"
+        />
+      </div>
+
       <div className="mb-6 grid gap-2">
         <Label>Selected Dates:</Label>
         <div className="text-muted-foreground">
@@ -137,6 +204,7 @@ export default function Devis() {
               <Button
                 variant="outline"
                 className="w-full justify-start text-left font-normal"
+                disabled={!arrivalDate}
               >
                 <CalendarDaysIcon className="mr-2 h-4 w-4" />
                 <span>
@@ -152,6 +220,7 @@ export default function Devis() {
                 selected={departureDate}
                 onSelect={setDepartureDate}
                 initialFocus
+                disabled={(date) => (arrivalDate ? date < arrivalDate : false)}
               />
             </PopoverContent>
           </Popover>
@@ -202,64 +271,103 @@ export default function Devis() {
           ))}
         </div>
       </div>
+
       <div className="mt-6">
-        <Label htmlFor="guests">Number of Guests</Label>
-        <NumericStepper
-          min={1}
-          max={10}
-          value={numberOfGuests}
-          onChange={setNumberOfGuests}
-        />
-      </div>
-      <div className="mt-6">
-        <h3 className="text-lg font-bold">Selected Activities:</h3>
-        <ul className="list-disc space-y-2 pl-5">
-          {selectedActivities.map((activity, index) => (
-            <li key={index} className="flex items-center justify-between">
-              <span>{activity}</span>
-              <Button
-                variant="outline"
-                onClick={() => removeActivity(activity)}
+        <h3 className="text-lg font-bold">Activités</h3>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Remove
-              </Button>
-            </li>
-          ))}
-        </ul>
+                Activités
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Prix unitaire
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Nombres de personnes
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Total
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white">
+            {selectedActivities.map((activity) => (
+              <tr key={activity}>
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                  {activity}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  {activities.find((act) => act.name === activity)!.price} €
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <NumericStepper
+                    min={1}
+                    max={10}
+                    value={activityGuests[activity] || 1}
+                    onChange={(value) => handleGuestChange(activity, value)}
+                  />
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  {(activityGuests[activity] || 1) *
+                    activities.find((act) => act.name === activity)!.price}{" "}
+                  €
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                  <Button
+                    variant="outline"
+                    onClick={() => removeActivity(activity)}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td
+                colSpan={3}
+                className="whitespace-nowrap px-6 py-4 text-xl font-bold text-gray-900"
+              >
+                Total
+              </td>
+              <td />
+              <td className="whitespace-nowrap px-6 py-4 text-right text-xl font-bold text-gray-900">
+                {calculateTotal()} €
+              </td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
       <div className="mt-6">
-        <Button type="submit" className="w-full">
-          Book Activities
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={!canSubmit}
+          onClick={handleSubmit}
+        >
+          Réserver gratuitement
         </Button>
       </div>
     </div>
-  );
-}
-
-function CalendarDaysIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
   );
 }
