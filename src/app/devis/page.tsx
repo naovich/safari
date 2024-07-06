@@ -93,7 +93,7 @@ export default function Devis() {
     };
 
     try {
-      const response = await fetch("/api/reserve", {
+      const response = await fetch("/api/sendEmail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
