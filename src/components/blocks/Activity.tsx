@@ -36,27 +36,28 @@ export default function Activity() {
   return (
     <section className="py-16">
       <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold">Top Travelling Destinations</h2>
+        <h2 className="text-3xl font-bold">
+          De nombreuses activités dans la nature
+        </h2>
         <p className="mx-auto mt-4 max-w-2xl">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Hic fuga sit
-          illo modi aut aspernatur tempore laboriosam saepe dolores eveniet.
+          Safari Ndjéma vous propose des activités en pleine nature pour
+          découvrir la faune et la flore des Comores.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           {destinations.map((dest, index) => (
-            <Card key={index} className="bg-sky-100">
+            <div key={index} className="overflow-hidden rounded-lg bg-sky-100">
               <Image
                 src={dest.image.src}
-                alt={dest.name}
-                className="h-48 w-full object-cover"
+                alt={dest.image.alt}
+                className="h-48 w-full rounded-t-lg object-cover"
                 height={200}
                 width={400}
               />
-              <CardContent className="p-4">
-                <h3 className="text-xl font-bold">{dest.name}</h3>
-                <p className="mt-2 text-sm">{dest.hours} heures</p>
+              <div className="p-4">
+                <h3 className="text-center text-xl font-bold">{dest.name}</h3>
                 <p className="mt-2 text-sm">{dest.description}</p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       </div>

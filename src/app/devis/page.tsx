@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,9 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import NumericStepper from "@/components/ui/numericStepper";
 import { Input } from "@/components/ui/input"; // Importation de l'input
-
 import { CalendarDaysIcon } from "@/assets/icons";
 import { activitiesDevis } from "@/lib/labels";
+import { useRouter } from "next/navigation";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -29,6 +30,7 @@ export default function Devis() {
   const [phone, setPhone] = useState<string>("");
 
   const activities = activitiesDevis;
+  const router = useRouter();
 
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -70,12 +72,14 @@ export default function Devis() {
     setActivityGuests((prev) => ({ ...prev, [activity]: guests }));
   };
 
+  const calculateTotalPerActivity = (activity: string) => {
+    const activityDetails = activities.find((act) => act.name === activity);
+    return activityGuests[activity] * (activityDetails?.price || 0);
+  };
+
   const calculateTotal = () => {
     return selectedActivities.reduce(
-      (total, activity) =>
-        total +
-        activities.find((act) => act.name === activity)!.price *
-          activityGuests[activity],
+      (total, activity) => total + calculateTotalPerActivity(activity),
       0,
     );
   };
@@ -90,10 +94,12 @@ export default function Devis() {
       departureDate,
       selectedActivities,
       activityGuests,
+      totalPrice: calculateTotal(),
+      template: "reservation",
     };
 
     try {
-      const response = await fetch("/api/sendEmail", {
+      const response = await fetch("/api/nodeMailJet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +112,7 @@ export default function Devis() {
       }
 
       const result = await response.json();
-      console.log("Success:", result);
+      router.push("/devis/remerciement");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -124,7 +130,7 @@ export default function Devis() {
           id="first-name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First Name"
+          placeholder=""
         />
         <Label htmlFor="last-name">Nom</Label>
         <Input
@@ -132,7 +138,7 @@ export default function Devis() {
           id="last-name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          placeholder="Last Name"
+          placeholder=""
         />
         <Label htmlFor="email">Email</Label>
         <Input
@@ -140,39 +146,39 @@ export default function Devis() {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder=""
         />
         {!isValidEmail(email) && email && (
           <p className="text-red-500">Adresse email invalide</p>
         )}
-        <Label htmlFor="phone">Phone</Label>
+        <Label htmlFor="phone">Téléphone</Label>
         <Input
           type="tel"
           id="phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          placeholder="Phone"
+          placeholder=""
         />
       </div>
 
       <div className="mb-6 grid gap-2">
-        <Label>Selected Dates:</Label>
+        <Label>Dates</Label>
         <div className="text-muted-foreground">
-          Arrival Date:{" "}
+          Date d&rsquo;arrivée:{" "}
           <span>
-            {arrivalDate ? arrivalDate.toLocaleDateString() : "Not selected"}
+            {arrivalDate ? arrivalDate.toLocaleDateString() : "Non sélectionné"}
           </span>{" "}
-          - Departure Date:{" "}
+          - Date de départ:{" "}
           <span>
             {departureDate
               ? departureDate.toLocaleDateString()
-              : "Not selected"}
+              : "Non sélectionné"}
           </span>
         </div>
       </div>
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="arrival-date">Arrival Date</Label>
+          <Label htmlFor="arrival-date">Date d&rsquo;arrivée</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -183,7 +189,7 @@ export default function Devis() {
                 <span>
                   {arrivalDate
                     ? arrivalDate.toLocaleDateString()
-                    : "Select date"}
+                    : "Selectionner une date"}
                 </span>
               </Button>
             </PopoverTrigger>
@@ -193,12 +199,13 @@ export default function Devis() {
                 selected={arrivalDate}
                 onSelect={setArrivalDate}
                 initialFocus
+                lang="fr"
               />
             </PopoverContent>
           </Popover>
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="departure-date">Departure Date</Label>
+          <Label htmlFor="departure-date"> Date de départ</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -210,7 +217,7 @@ export default function Devis() {
                 <span>
                   {departureDate
                     ? departureDate.toLocaleDateString()
-                    : "Select date"}
+                    : "Selectionner une date"}
                 </span>
               </Button>
             </PopoverTrigger>
@@ -221,13 +228,14 @@ export default function Devis() {
                 onSelect={setDepartureDate}
                 initialFocus
                 disabled={(date) => (arrivalDate ? date < arrivalDate : false)}
+                lang="fr"
               />
             </PopoverContent>
           </Popover>
         </div>
       </div>
       <div className="mt-6 grid gap-4">
-        <Label htmlFor="activities">Activities</Label>
+        <Label htmlFor="activities">Activités</Label>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {activities.map((activity) => (
             <div
@@ -327,9 +335,7 @@ export default function Devis() {
                   />
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                  {(activityGuests[activity] || 1) *
-                    activities.find((act) => act.name === activity)!.price}{" "}
-                  €
+                  {calculateTotalPerActivity(activity)} €
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                   <Button

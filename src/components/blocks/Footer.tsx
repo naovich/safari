@@ -6,12 +6,9 @@ export default function Footer() {
     <footer className="bg-black py-16 text-white">
       <div className="container mx-auto grid grid-cols-1 gap-8 md:grid-cols-4">
         <ContactInfo />
-        <CategoryList />
-        <LatestGallery />
-        <TravelList />
       </div>
       <div className="mt-8 text-center text-sm">
-        <p>© 2024 Go Trip. All rights reserved | Designed by W3layouts</p>
+        <p>© 2024 Safari Ndjéma</p>
       </div>
     </footer>
   );
@@ -21,15 +18,18 @@ function ContactInfo() {
   return (
     <div>
       <h3 className="text-xl font-bold">Contact Us</h3>
-      <p className="mt-4">
-        California, #32841 block, #221DRS 75 West Rock, Maple Building, UK
-      </p>
-      <p className="mt-2">+(21)-255-999-8888</p>
-      <p className="mt-2">Exterior-mail@support.com</p>
+      <p className="mt-4">Safari Ndjéma</p>
+      <p className="mt-2">+33 6 12 87 79 86</p>
       <div className="mt-4 flex space-x-4">
-        <FacebookIcon className="h-5 w-5" />
-        <InstagramIcon className="h-5 w-5" />
-        <LinkedinIcon className="h-5 w-5" />
+        <a href="https://www.instagram.com/safarii_njema/" target="_blank">
+          <InstagramIcon className="h-5 w-5" />
+        </a>
+        <a
+          href="https://www.facebook.com/profile.php?id=100071291511325"
+          target="_blank"
+        >
+          <FacebookIcon className="h-5 w-5" />
+        </a>
       </div>
     </div>
   );

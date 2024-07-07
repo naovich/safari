@@ -8,9 +8,8 @@ import { FacebookIcon, InstagramIcon } from "@/assets/icons";
 
 const menuItems = [
   { label: "Accueil", link: "/" },
-  { label: "A propos", link: "#" },
   { label: "Devis", link: "/devis" },
-  { label: "Contact", link: "#" },
+  { label: "Contact", link: "contact" },
 ];
 
 export default function Header() {
@@ -19,13 +18,16 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between px-6 pt-2">
         <div className="flex items-center space-x-4">
           <div className="grid columns-2 items-center gap-1 overflow-hidden">
-            <Image
-              src="/images/icons/logo.jpg"
-              alt="logo"
-              width={60}
-              height={60}
-              className="mx-auto hidden rounded-full lg:block"
-            />
+            <Link href="/">
+              {" "}
+              <Image
+                src="/images/icons/logo.jpg"
+                alt="logo"
+                width={60}
+                height={60}
+                className="mx-auto hidden rounded-full lg:block"
+              />
+            </Link>
             <div className="flex flex-row gap-4 pb-2">
               <MobileMenu />
               <span
@@ -52,7 +54,10 @@ export default function Header() {
           <a href="https://www.instagram.com/safarii_njema/" target="_blank">
             <InstagramIcon className="h-5 w-5" />
           </a>
-          <a href="https://www.instagram.com/safarii_njema/" target="_blank">
+          <a
+            href="https://www.facebook.com/profile.php?id=100071291511325"
+            target="_blank"
+          >
             <FacebookIcon className="h-5 w-5" />
           </a>
         </div>

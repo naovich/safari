@@ -1,5 +1,7 @@
 import { dancingFont } from "@/assets/fonts";
 import { Button } from "../ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 interface HeroProps {
   title: string;
@@ -15,12 +17,18 @@ export default function Hero({
   image,
 }: HeroProps) {
   return (
-    <section
-      className="relative h-[600px] w-full bg-cover bg-bottom"
-      style={{
-        backgroundImage: `url(${image}?height=600&width=1920)`,
-      }}
-    >
+    <section className="relative h-[600px] w-full">
+      {image && (
+        <Image
+          src={image}
+          alt="Background Image"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="bottom"
+          priority
+          className="z-[-1]"
+        />
+      )}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30 text-center text-white">
         <h1
           className={`${dancingFont.className} pb-6 text-center text-7xl font-bold`}
@@ -29,8 +37,8 @@ export default function Hero({
         </h1>
         <h1 className="text-5xl font-bold">{title}</h1>
         <p className="mt-4 max-w-xl">{description}</p>
-        <Button className="mt-6 bg-blue-500 hover:bg-blue-600">
-          {buttonText}
+        <Button asChild className="mt-6 bg-blue-500 hover:bg-blue-600">
+          <Link href="/devis">{buttonText}</Link>
         </Button>
       </div>
     </section>
