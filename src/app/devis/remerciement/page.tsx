@@ -10,7 +10,7 @@ function Remerciment() {
           Merci pour votre réservation
         </h2>
         <p className="mb-4">
-          Nous vous remercions d&apos;avoir choisi safari njéma. Votre
+          Nous vous remercions d&apos;avoir choisi safarii njéma. Votre
           réservation a été reçue et est en cours de traitement.
         </p>
         <p className="mb-4">

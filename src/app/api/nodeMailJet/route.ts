@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     let subject, htmlPart;
 
     if (data.template === "reservation") {
-      subject = `Safari réservation de: ${data.firstName} ${data.lastName}`;
+      subject = `Safarii réservation de: ${data.firstName} ${data.lastName}`;
       htmlPart = `
         <p><b>Prénom:</b> ${data.firstName}</p>
         <p><b>Nom:</b> ${data.lastName}</p>
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
             .join("")}
         </ul>
         <p><b>Total:</b> ${data.totalPrice} €</p>
-        <p><a href='https://www.nadhoir.com/'>Safari njéma</a>!</p><br/>
+        <p><a href='https://safarii-njema.vercel.app/'>Safarii njéma</a>!</p><br/>
       `;
     } else if (data.template === "contact") {
       subject = `Message de: ${data.firstName} ${data.lastName}`;
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         <p><b>Objet:</b> ${data.subject}</p>
         <p><b>Message:</b></p>
         <p>${data.message}</p>
-        <p><a href='https://www.nadhoir.com/'>Safari njéma</a>!</p><br/>
+        <p><a href='https://safarii-njema.vercel.app/'>Safarii njéma</a>!</p><br/>
       `;
     } else {
       throw new Error("Invalid template type");
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
             To: [
               {
                 Email: "attoumani_nadhoir@yahoo.fr",
-                Name: `Safari Njéma`,
+                Name: `Safarii Njéma`,
               },
             ],
             Subject: subject,

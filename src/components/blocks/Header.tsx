@@ -35,7 +35,7 @@ export default function Header() {
               <span
                 className={`${dancingFont.className} text-center text-xl font-bold`}
               >
-                Safari Njéma
+                Safarii Njéma
               </span>
             </div>
           </div>
@@ -97,7 +97,7 @@ function MobileMenu() {
                 href={item.link}
                 className="flex items-center gap-4 px-2.5 text-foreground"
                 prefetch={false}
-                onClick={handleLinkClick} // Ferme le menu lorsqu'un lien est cliqué
+                onClick={handleLinkClick}
               >
                 {item.label}
               </Link>

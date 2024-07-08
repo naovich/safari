@@ -7,9 +7,9 @@ import Footer from "@/components/blocks/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Safari Njéma",
+  title: "Safarii Njéma",
   description:
-    "Safari Njéma est une agence de voyage dédiée à vous offrir des expériences inoubliables aux Comores",
+    "Safarii Njéma est une agence de voyage dédiée à vous offrir des expériences inoubliables aux Comores",
 };
 
 export default function RootLayout({

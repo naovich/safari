@@ -8,7 +8,7 @@ export default function App() {
     <div className="w-full">
       <Hero
         title="Explorez les destinations de vos rêves"
-        description="Découvrez des lieux extraordinaires et créez des souvenirs inoubliables avec SAFARI."
+        description="Découvrez des lieux extraordinaires et créez des souvenirs inoubliables avec Safarii."
         buttonText="Réservez votre voyage"
         image="/images/plage-midi-cocotiers-upscale-crop.jpg"
       />
@@ -17,7 +17,7 @@ export default function App() {
       <Activity />
       <Hero
         title="Nous sommes là à chaque étape de votre voyage"
-        description="Profitez d'un accompagnement personnalisé tout au long de votre aventure avec SAFARI NJEMA. Nous nous occupons de tout pour que vous puissiez vous détendre et profiter pleinement."
+        description="Profitez d'un accompagnement personnalisé tout au long de votre aventure avec SAFARII NJEMA. Nous nous occupons de tout pour que vous puissiez vous détendre et profiter pleinement."
         buttonText="Réservez votre voyage"
         image="/images/plage-coucher-soleil.jpg"
       />
