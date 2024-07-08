@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function Destination() {
   const destinations = [
@@ -40,22 +41,28 @@ export default function Destination() {
   ];
 
   return (
-    <section className="bg-blue-200 p-16">
-      <div className="container mx-auto grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <section className="w-full bg-blue-200 px-4 py-16">
+      <div className="container mx-auto grid w-full grid-cols-1 gap-4 px-2 md:grid-cols-2 lg:grid-cols-4">
         {destinations.map((dest, index) => (
-          <div key={index} className="relative overflow-hidden rounded-lg">
-            <Image
-              src={dest.image.src}
-              alt={dest.image.alt}
-              className="h-full w-full object-cover"
-              width={400}
-              height={200}
-            />
-            <div className="absolute inset-0 flex flex-col justify-end rounded-lg bg-black bg-opacity-40 p-4">
-              <h3 className="text-xl font-bold text-white">{dest.title}</h3>
-              <p className="mt-2 text-white">{dest.description}</p>
+          <Card key={index} className="rounded-lg shadow-lg">
+            <div className="overflow-hidden rounded-t-lg">
+              <Image
+                src={dest.image.src}
+                alt={dest.image.alt}
+                className="h-48 w-full object-cover"
+                width={400}
+                height={200}
+              />
             </div>
-          </div>
+            <CardContent className="p-4">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">
+                  {dest.title}
+                </CardTitle>
+              </CardHeader>
+              <p className="mt-2">{dest.description}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </section>
