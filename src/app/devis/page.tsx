@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import NumericStepper from "@/components/ui/numericStepper";
 import { Input } from "@/components/ui/input"; // Importation de l'input
-import { CalendarDaysIcon } from "@/assets/icons";
+import { CalendarDaysIcon, TrashIcon } from "@/assets/icons";
 import { activitiesDevis } from "@/lib/labels";
 import { useRouter } from "next/navigation";
 
@@ -280,53 +280,51 @@ export default function Devis() {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 w-full overflow-x-auto">
         <h3 className="text-lg font-bold">Activités</h3>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
                 Activités
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Prix unitaire
+                Prix
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Nombres de personnes
+                Personnes
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
                 Total
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-              >
-                Action
-              </th>
+                className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+              ></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {selectedActivities.map((activity) => (
               <tr key={activity}>
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                <td className="whitespace-nowrap px-2 py-1 text-sm font-medium text-gray-900">
                   {activity}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
                   {activities.find((act) => act.name === activity)!.price} €
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
                   <NumericStepper
                     min={1}
                     max={10}
@@ -334,15 +332,15 @@ export default function Devis() {
                     onChange={(value) => handleGuestChange(activity, value)}
                   />
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
                   {calculateTotalPerActivity(activity)} €
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                <td className="whitespace-nowrap px-2 py-1 text-right text-sm font-medium">
                   <Button
                     variant="outline"
                     onClick={() => removeActivity(activity)}
                   >
-                    Remove
+                    <TrashIcon />
                   </Button>
                 </td>
               </tr>
@@ -352,18 +350,19 @@ export default function Devis() {
             <tr>
               <td
                 colSpan={3}
-                className="whitespace-nowrap px-6 py-4 text-xl font-bold text-gray-900"
+                className="whitespace-nowrap px-2 py-1 text-xl font-bold text-gray-900"
               >
                 Total
               </td>
               <td />
-              <td className="whitespace-nowrap px-6 py-4 text-right text-xl font-bold text-gray-900">
+              <td className="whitespace-nowrap px-2 py-1 text-right text-xl font-bold text-gray-900">
                 {calculateTotal()} €
               </td>
             </tr>
           </tfoot>
         </table>
       </div>
+
       <div className="mt-6">
         <Button
           type="submit"

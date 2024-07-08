@@ -9,7 +9,7 @@ import { FacebookIcon, InstagramIcon } from "@/assets/icons";
 const menuItems = [
   { label: "Accueil", link: "/" },
   { label: "Devis", link: "/devis" },
-  { label: "Contact", link: "contact" },
+  { label: "Contact", link: "/contact" },
 ];
 
 export default function Header() {
@@ -81,11 +81,11 @@ function MobileMenu() {
             {menuItems.map((item) => (
               <Link
                 key={item.label}
-                href="#"
+                href={item.link}
                 className="flex items-center gap-4 px-2.5 text-foreground"
                 prefetch={false}
               >
-                {item.link}
+                {item.label}
               </Link>
             ))}
           </nav>

@@ -45,7 +45,7 @@ export default function NumericStepper({
           id="stepper"
           value={value}
           onChange={handleChange}
-          className="h-small mx-2 flex w-full max-w-[40px] p-0 text-center outline-none placeholder:text-muted-foreground focus:ring-0 focus:ring-offset-0 sm:text-sm"
+          className="h-small mx-2 flex w-[30px] p-0 text-center outline-none placeholder:text-muted-foreground focus:ring-0 focus:ring-offset-0 sm:text-sm md:w-[40px]"
         />
         <Button
           variant="ghost"
