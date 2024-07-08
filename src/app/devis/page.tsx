@@ -137,7 +137,7 @@ export default function Devis() {
 
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6 md:p-8">
-      <h2 className="mb-4 text-2xl font-bold">
+      <h2 className="mb-4 text-xl font-bold md:text-2xl">
         Réservez gratuitement vos activités
       </h2>
       <div className="mb-6 grid gap-2">
@@ -321,7 +321,7 @@ export default function Devis() {
                 scope="col"
                 className="py-1 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
               >
-                Activités
+                Types
               </th>
               <th
                 scope="col"
@@ -350,7 +350,7 @@ export default function Devis() {
           <tbody className="divide-y divide-gray-200 bg-white">
             {selectedActivities.map((activity) => (
               <tr key={activity}>
-                <td className="whitespace-nowrap px-2 py-1 text-sm font-medium text-gray-900">
+                <td className="max-w-[100px] whitespace-normal break-words px-2 py-1 text-sm font-medium text-gray-900">
                   {activity}
                 </td>
                 <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
