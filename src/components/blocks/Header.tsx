@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -5,6 +6,7 @@ import Image from "next/image";
 
 import { dancingFont, patuaFont } from "@/assets/fonts";
 import { FacebookIcon, InstagramIcon } from "@/assets/icons";
+import { useState } from "react";
 
 const menuItems = [
   { label: "Accueil", link: "/" },
@@ -67,11 +69,22 @@ export default function Header() {
 }
 
 function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="lg:hidden">
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="h-8 w-8">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => setIsOpen(!isOpen)}
+          >
             <MenuIcon className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
@@ -84,6 +97,7 @@ function MobileMenu() {
                 href={item.link}
                 className="flex items-center gap-4 px-2.5 text-foreground"
                 prefetch={false}
+                onClick={handleLinkClick} // Ferme le menu lorsqu'un lien est cliqué
               >
                 {item.label}
               </Link>
