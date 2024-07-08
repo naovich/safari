@@ -8,7 +8,7 @@ export default function Footer() {
         <ContactInfo />
       </div>
       <div className="mt-8 text-center text-sm">
-        <p>© 2024 Safari Ndjéma</p>
+        <p>© 2024 Safari Njéma</p>
       </div>
     </footer>
   );
@@ -18,7 +18,7 @@ function ContactInfo() {
   return (
     <div>
       <h3 className="text-xl font-bold">Contact Us</h3>
-      <p className="mt-4">Safari Ndjéma</p>
+      <p className="mt-4">Safari Njéma</p>
       <p className="mt-2">+33 6 12 87 79 86</p>
       <div className="mt-4 flex space-x-4">
         <a href="https://www.instagram.com/safarii_njema/" target="_blank">

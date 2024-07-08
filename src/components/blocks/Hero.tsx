@@ -33,7 +33,7 @@ export default function Hero({
         <h1
           className={`${dancingFont.className} pb-6 text-center text-7xl font-bold`}
         >
-          Safari njema
+          Safari Njéma
         </h1>
         <h1 className="text-5xl font-bold">{title}</h1>
         <p className="mt-4 max-w-xl">{description}</p>

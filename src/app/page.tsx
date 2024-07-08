@@ -17,7 +17,7 @@ export default function App() {
       <Activity />
       <Hero
         title="Nous sommes là à chaque étape de votre voyage"
-        description="Profitez d'un accompagnement personnalisé tout au long de votre aventure avec SAFARI NDJEMA. Nous nous occupons de tout pour que vous puissiez vous détendre et profiter pleinement."
+        description="Profitez d'un accompagnement personnalisé tout au long de votre aventure avec SAFARI NJEMA. Nous nous occupons de tout pour que vous puissiez vous détendre et profiter pleinement."
         buttonText="Réservez votre voyage"
         image="/images/plage-coucher-soleil.jpg"
       />

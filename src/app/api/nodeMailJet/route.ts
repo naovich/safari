@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
             To: [
               {
                 Email: "attoumani_nadhoir@yahoo.fr",
-                Name: `Safari njéma`,
+                Name: `Safari Njéma`,
               },
             ],
             Subject: subject,

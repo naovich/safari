@@ -33,7 +33,7 @@ export default function Header() {
               <span
                 className={`${dancingFont.className} text-center text-xl font-bold`}
               >
-                Safari ndjema
+                Safari Njéma
               </span>
             </div>
           </div>

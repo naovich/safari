@@ -40,7 +40,7 @@ export default function Activity() {
           De nombreuses activités dans la nature
         </h2>
         <p className="mx-auto mt-4 max-w-2xl">
-          Safari Ndjéma vous propose des activités en pleine nature pour
+          Safari Njéma vous propose des activités en pleine nature pour
           découvrir la faune et la flore des Comores.
         </p>
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
