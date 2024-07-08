@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,12 +9,12 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import NumericStepper from "@/components/ui/numericStepper";
+import { Calendar as CustomCalendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input"; // Importation de l'input
 import { CalendarDaysIcon, TrashIcon } from "@/assets/icons";
-import { activitiesDevis } from "@/lib/labels";
 import { useRouter } from "next/navigation";
+import NumericStepper from "@/components/ui/numericStepper";
+import { activitiesDevis } from "@/lib/labels";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -73,7 +74,9 @@ export default function Devis() {
   };
 
   const calculateTotalPerActivity = (activity: string) => {
-    const activityDetails = activities.find((act) => act.name === activity);
+    const activityDetails = activities.find(
+      (act: any) => act.name === activity,
+    );
     return activityGuests[activity] * (activityDetails?.price || 0);
   };
 
@@ -116,6 +119,20 @@ export default function Devis() {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  // State for managing the Popover visibility
+  const [isArrivalPopoverOpen, setArrivalPopoverOpen] = useState(false);
+  const [isDeparturePopoverOpen, setDeparturePopoverOpen] = useState(false);
+
+  const handleArrivalDateSelect = (date: Date | undefined) => {
+    setArrivalDate(date);
+    setArrivalPopoverOpen(false); // Close the Popover when a date is selected
+  };
+
+  const handleDepartureDateSelect = (date: Date | undefined) => {
+    setDepartureDate(date);
+    setDeparturePopoverOpen(false); // Close the Popover when a date is selected
   };
 
   return (
@@ -179,11 +196,15 @@ export default function Devis() {
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="grid gap-2">
           <Label htmlFor="arrival-date">Date d&rsquo;arrivée</Label>
-          <Popover>
+          <Popover
+            open={isArrivalPopoverOpen}
+            onOpenChange={setArrivalPopoverOpen}
+          >
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className="w-full justify-start text-left font-normal"
+                onClick={() => setArrivalPopoverOpen(true)}
               >
                 <CalendarDaysIcon className="mr-2 h-4 w-4" />
                 <span>
@@ -194,10 +215,10 @@ export default function Devis() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
+              <CustomCalendar
                 mode="single"
                 selected={arrivalDate}
-                onSelect={setArrivalDate}
+                onSelect={handleArrivalDateSelect}
                 initialFocus
                 lang="fr"
               />
@@ -206,12 +227,16 @@ export default function Devis() {
         </div>
         <div className="grid gap-2">
           <Label htmlFor="departure-date"> Date de départ</Label>
-          <Popover>
+          <Popover
+            open={isDeparturePopoverOpen}
+            onOpenChange={setDeparturePopoverOpen}
+          >
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className="w-full justify-start text-left font-normal"
                 disabled={!arrivalDate}
+                onClick={() => setDeparturePopoverOpen(true)}
               >
                 <CalendarDaysIcon className="mr-2 h-4 w-4" />
                 <span>
@@ -222,10 +247,10 @@ export default function Devis() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
+              <CustomCalendar
                 mode="single"
                 selected={departureDate}
-                onSelect={setDepartureDate}
+                onSelect={handleDepartureDateSelect}
                 initialFocus
                 disabled={(date) => (arrivalDate ? date < arrivalDate : false)}
                 lang="fr"
@@ -237,7 +262,7 @@ export default function Devis() {
       <div className="mt-6 grid gap-4">
         <Label htmlFor="activities">Activités</Label>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {activities.map((activity) => (
+          {activities.map((activity: any) => (
             <div
               key={activity.name}
               className={`relative cursor-pointer rounded-lg border p-4 ${
@@ -362,7 +387,6 @@ export default function Devis() {
           </tfoot>
         </table>
       </div>
-
       <div className="mt-6">
         <Button
           type="submit"
