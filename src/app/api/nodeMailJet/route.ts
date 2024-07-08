@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         <p><a href='https://www.nadhoir.com/'>Safari njéma</a>!</p><br/>
       `;
     } else if (data.template === "contact") {
-      subject = `Message de contact de: ${data.firstName} ${data.lastName}`;
+      subject = `Message de: ${data.firstName} ${data.lastName}`;
       htmlPart = `
         <p><b>Prénom:</b> ${data.firstName}</p>
         <p><b>Nom:</b> ${data.lastName}</p>
