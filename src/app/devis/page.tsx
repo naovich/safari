@@ -15,6 +15,7 @@ import { CalendarDaysIcon, TrashIcon } from "@/assets/icons";
 import { useRouter } from "next/navigation";
 import NumericStepper from "@/components/ui/numericStepper";
 import { activitiesDevis } from "@/lib/labels";
+import { de } from "date-fns/locale";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -121,18 +122,17 @@ export default function Devis() {
     }
   };
 
-  // State for managing the Popover visibility
   const [isArrivalPopoverOpen, setArrivalPopoverOpen] = useState(false);
   const [isDeparturePopoverOpen, setDeparturePopoverOpen] = useState(false);
 
   const handleArrivalDateSelect = (date: Date | undefined) => {
     setArrivalDate(date);
-    setArrivalPopoverOpen(false); // Close the Popover when a date is selected
+    setArrivalPopoverOpen(false);
   };
 
   const handleDepartureDateSelect = (date: Date | undefined) => {
     setDepartureDate(date);
-    setDeparturePopoverOpen(false); // Close the Popover when a date is selected
+    setDeparturePopoverOpen(false);
   };
 
   return (
@@ -179,54 +179,28 @@ export default function Devis() {
       </div>
 
       <div className="mb-6 grid gap-2">
-        <Label>Dates</Label>
-        <div className="text-muted-foreground">
-          Date d&rsquo;arrivée:{" "}
-          <span>
-            {arrivalDate ? arrivalDate.toLocaleDateString() : "Non sélectionné"}
-          </span>{" "}
-          - Date de départ:{" "}
-          <span>
-            {departureDate
-              ? departureDate.toLocaleDateString()
-              : "Non sélectionné"}
-          </span>
+        <div className="grid grid-rows-2 gap-2 text-muted-foreground lg:grid-cols-2 lg:grid-rows-1">
+          <div>
+            Date de départ:{" "}
+            <span>
+              {departureDate
+                ? departureDate.toLocaleDateString()
+                : "Non sélectionné"}
+            </span>{" "}
+          </div>
+          <div>
+            Date d&rsquo;arrivée:{" "}
+            <span>
+              {arrivalDate
+                ? arrivalDate.toLocaleDateString()
+                : "Non sélectionné"}
+            </span>
+          </div>
         </div>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="arrival-date">Date d&rsquo;arrivée</Label>
-          <Popover
-            open={isArrivalPopoverOpen}
-            onOpenChange={setArrivalPopoverOpen}
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left font-normal"
-                onClick={() => setArrivalPopoverOpen(true)}
-              >
-                <CalendarDaysIcon className="mr-2 h-4 w-4" />
-                <span>
-                  {arrivalDate
-                    ? arrivalDate.toLocaleDateString()
-                    : "Selectionner une date"}
-                </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <CustomCalendar
-                mode="single"
-                selected={arrivalDate}
-                onSelect={handleArrivalDateSelect}
-                initialFocus
-                lang="fr"
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="departure-date"> Date de départ</Label>
+          <Label htmlFor="departure-date">Date de départ</Label>
           <Popover
             open={isDeparturePopoverOpen}
             onOpenChange={setDeparturePopoverOpen}
@@ -234,8 +208,7 @@ export default function Devis() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-normal"
-                disabled={!arrivalDate}
+                className="w-full justify-start text-left font-normal lg:w-[278px]"
                 onClick={() => setDeparturePopoverOpen(true)}
               >
                 <CalendarDaysIcon className="mr-2 h-4 w-4" />
@@ -252,7 +225,41 @@ export default function Devis() {
                 selected={departureDate}
                 onSelect={handleDepartureDateSelect}
                 initialFocus
-                disabled={(date) => (arrivalDate ? date < arrivalDate : false)}
+                lang="fr"
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="arrival-date">Date d&rsquo;arrivée</Label>
+          <Popover
+            open={isArrivalPopoverOpen}
+            onOpenChange={setArrivalPopoverOpen}
+          >
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal lg:w-[278px]"
+                disabled={!departureDate}
+                onClick={() => setArrivalPopoverOpen(true)}
+              >
+                <CalendarDaysIcon className="mr-2 h-4 w-4" />
+                <span>
+                  {arrivalDate
+                    ? arrivalDate.toLocaleDateString()
+                    : "Selectionner une date"}
+                </span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CustomCalendar
+                mode="single"
+                selected={arrivalDate}
+                onSelect={handleArrivalDateSelect}
+                initialFocus
+                disabled={(date) =>
+                  departureDate ? date < departureDate : false
+                }
                 lang="fr"
               />
             </PopoverContent>
