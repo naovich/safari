@@ -97,7 +97,7 @@ export default function Contact() {
           id="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Votre message"
+          placeholder="Message"
         />
       </div>
       <div className="mt-6">
