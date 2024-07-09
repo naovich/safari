@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailjet from "node-mailjet";
+import { getContactEmail } from "../graphQL";
 
 const mailjetClient = new Mailjet({
   apiKey: process.env.MAILJET_API_KEY,
@@ -10,6 +11,9 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     let subject, htmlPart;
+
+    const contactData = await getContactEmail();
+    const contactEmail = contactData.backend.email;
 
     if (data.template === "reservation") {
       subject = `Safarii réservation de: ${data.firstName} ${data.lastName}`;
@@ -58,7 +62,7 @@ export async function POST(request: NextRequest) {
             },
             To: [
               {
-                Email: "attoumani_nadhoir@yahoo.fr",
+                Email: contactEmail, // Utilisez l'email récupéré depuis l'API GraphQL
                 Name: `Safarii Njéma`,
               },
             ],
