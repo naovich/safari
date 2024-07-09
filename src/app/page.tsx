@@ -1,10 +1,8 @@
-// src/app/page.tsx
 import Hero from "@/components/blocks/Hero";
 import Destination from "@/components/blocks/Destinations";
 import Activity from "@/components/blocks/Activity";
 import About from "@/components/blocks/About";
 import { AccueilResponse, getAccueil } from "./api/graphQL";
-// Assurez-vous que l'interface est correctement exportée
 
 export default async function App() {
   let accueilData: AccueilResponse | null = null;
@@ -20,53 +18,32 @@ export default async function App() {
 
   return (
     <div className="w-full">
+      {/*JSON.stringify(accueilData)*/}
       <Hero
         nom={accueilData.accueil.heroHaut.compagnie}
         title={accueilData.accueil.heroHaut.titre}
         description={accueilData.accueil.heroHaut.sousTitre}
-        buttonText="Réservez votre voyage"
-        image="/images/plage-midi-cocotiers-upscale-crop.jpg"
+        buttonText={accueilData.accueil.heroHaut.liens.label}
+        image={accueilData.accueil.heroHaut.image}
       />
-      <About />+
-      <Destination />
-      <Activity />
+      <About
+        title={accueilData.accueil.presentation.titre}
+        description={accueilData.accueil.presentation.description}
+      />
+      +
+      <Destination Items={accueilData.accueil.lieu} />
+      <Activity
+        titre={accueilData.accueil.titreActivite}
+        description={accueilData.accueil.descriptionActivite}
+        Items={accueilData.accueil.activite}
+      />
       <Hero
         nom={accueilData.accueil.heroBas.compagnie}
         title={accueilData.accueil.heroBas.titre}
         description={accueilData.accueil.heroBas.sousTitre}
-        buttonText="Réservez votre voyage"
-        image="/images/plage-coucher-soleil.jpg"
+        buttonText={accueilData.accueil.heroBas.liens.label}
+        image={accueilData.accueil.heroBas.image}
       />
     </div>
   );
 }
-
-/*import Hero from "@/components/blocks/Hero";
-import Destination from "@/components/blocks/Destinations";
-import Activity from "@/components/blocks/Activity";
-import About from "@/components/blocks/About";
-import { getAccueil } from "./api/graphQL";
-
-export default function App() {
-
-  return (
-    <div className="w-full">
-      <Hero
-        title="Explorez les destinations de vos rêves"
-        description="Découvrez des lieux extraordinaires et créez des souvenirs inoubliables avec Safarii."
-        buttonText="Réservez votre voyage"
-        image="/images/plage-midi-cocotiers-upscale-crop.jpg"
-      />
-      <About />
-      <Destination />
-      <Activity />
-      <Hero
-        title="Nous sommes là à chaque étape de votre voyage"
-        description="Profitez d'un accompagnement personnalisé tout au long de votre aventure avec SAFARII NJEMA. Nous nous occupons de tout pour que vous puissiez vous détendre et profiter pleinement."
-        buttonText="Réservez votre voyage"
-        image="/images/plage-coucher-soleil.jpg"
-      />
-    </div>
-  );
-}
-*/

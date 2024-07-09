@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Mailjet from "node-mailjet";
-import { getContactEmail } from "../graphQL";
+import { getProfil } from "../graphQL";
 
 const mailjetClient = new Mailjet({
   apiKey: process.env.MAILJET_API_KEY,
@@ -11,9 +11,8 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     let subject, htmlPart;
-
-    const contactData = await getContactEmail();
-    const contactEmail = contactData.backend.email;
+    const contactData = await getProfil();
+    const contactEmail = contactData.profil.email;
 
     if (data.template === "reservation") {
       subject = `Safarii réservation de: ${data.firstName} ${data.lastName}`;
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
             .join("")}
         </ul>
         <p><b>Total:</b> ${data.totalPrice} €</p>
-        <p><a href='https://safarii-njema.vercel.app/'>Safarii njéma</a>!</p><br/>
+        <p><a href='${contactData.profil.siteurl}'>${contactData.profil.nom}</a>!</p><br/>
       `;
     } else if (data.template === "contact") {
       subject = `Message de: ${data.firstName} ${data.lastName}`;
@@ -45,7 +44,7 @@ export async function POST(request: NextRequest) {
         <p><b>Objet:</b> ${data.subject}</p>
         <p><b>Message:</b></p>
         <p>${data.message}</p>
-        <p><a href='https://safarii-njema.vercel.app/'>Safarii njéma</a>!</p><br/>
+        <p><a href='${contactData.profil.siteurl}'>Safarii njéma</a>!</p><br/>
       `;
     } else {
       throw new Error("Invalid template type");
@@ -62,7 +61,7 @@ export async function POST(request: NextRequest) {
             },
             To: [
               {
-                Email: contactEmail, // Utilisez l'email récupéré depuis l'API GraphQL
+                Email: contactEmail,
                 Name: `Safarii Njéma`,
               },
             ],

@@ -8,7 +8,10 @@ interface HeroProps {
   title: string;
   description: string;
   buttonText: string;
-  image?: string;
+  image?: {
+    url: string;
+    alt?: string;
+  };
 }
 
 export default function Hero({
@@ -22,8 +25,8 @@ export default function Hero({
     <section className="relative h-[600px] w-full">
       {image && (
         <Image
-          src={image}
-          alt="Background Image"
+          src={image.url}
+          alt={image.alt ?? ""}
           layout="fill"
           objectFit="cover"
           objectPosition="bottom"

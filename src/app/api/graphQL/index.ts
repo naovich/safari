@@ -7,26 +7,30 @@ export interface GetContactEmailResponse {
   };
 }
 
+interface HeroProps {
+  nom: string;
+  compagnie: string;
+  titre: string;
+  sousTitre: string;
+  image: {
+    url: string;
+    alt?: string;
+  };
+  liens: {
+    label: string;
+    scr: string;
+  };
+}
+
 export interface AccueilResponse {
   accueil: {
-    heroHaut: {
-      compagnie: string;
-      sousTitre: string;
+    heroHaut: HeroProps;
+    heroBas: HeroProps;
+    presentation: {
       titre: string;
-    };
-    heroBas: {
-      compagnie: string;
-      sousTitre: string;
-      titre: string;
-    };
-    items: {
       description: string;
-      image: {
-        url: string;
-      };
-      id: string;
-      titre: string;
-    }[];
+    };
+
     lieu: {
       id: string;
       titre: string;
@@ -34,10 +38,26 @@ export interface AccueilResponse {
         url: string;
       };
     }[];
-    presentation: {
+    titreActivite: string;
+    descriptionActivite: string;
+    activite: {
+      id: string;
       titre: string;
-      description: string;
-    };
+      image: {
+        url: string;
+      };
+    }[];
+  };
+}
+
+export interface ProfilResponse {
+  profil: {
+    siteurl: string;
+    email: string;
+    facebook: string;
+    instagram: string;
+    nom: string;
+    phone: string;
   };
 }
 const endpoint = "https://graphql.datocms.com/";
@@ -83,20 +103,45 @@ export const getAccueil = async (): Promise<AccueilResponse> => {
           compagnie
           titre
           sousTitre
+          image {
+            url
+            alt
+          }
+          liens {
+            label
+          }
         }
         heroBas {
           nom
           compagnie
-          sousTitre
           titre
+          sousTitre
+          image {
+            url
+            alt
+          }
+          liens {
+            label
+          }
         }
-        items {
+
+        lieu {
+          id
+          titre
           description
           image {
             url
           }
+        }
+        titreActivite
+        descriptionActivite
+        activite {
           id
           titre
+          description
+          image {
+            url
+          }
         }
         lieu {
           id
@@ -113,4 +158,20 @@ export const getAccueil = async (): Promise<AccueilResponse> => {
     }
   `;
   return await client.request<AccueilResponse>(GET_DATA);
+};
+
+export const getProfil = async (): Promise<ProfilResponse> => {
+  const GET_DATA = gql`
+    query {
+      profil {
+        siteurl
+        email
+        facebook
+        instagram
+        nom
+        phone
+      }
+    }
+  `;
+  return await client.request<ProfilResponse>(GET_DATA);
 };
