@@ -1,9 +1,54 @@
+// src/app/page.tsx
 import Hero from "@/components/blocks/Hero";
 import Destination from "@/components/blocks/Destinations";
 import Activity from "@/components/blocks/Activity";
 import About from "@/components/blocks/About";
+import { AccueilResponse, getAccueil } from "./api/graphQL";
+// Assurez-vous que l'interface est correctement exportée
+
+export default async function App() {
+  let accueilData: AccueilResponse | null = null;
+  try {
+    accueilData = await getAccueil();
+  } catch (error) {
+    console.error("Error fetching accueil data:", error);
+  }
+
+  if (!accueilData) {
+    return <div>Erreur lors du chargement des données</div>;
+  }
+
+  return (
+    <div className="w-full">
+      <Hero
+        nom={accueilData.accueil.heroHaut.compagnie}
+        title={accueilData.accueil.heroHaut.titre}
+        description={accueilData.accueil.heroHaut.sousTitre}
+        buttonText="Réservez votre voyage"
+        image="/images/plage-midi-cocotiers-upscale-crop.jpg"
+      />
+      <About />+
+      <Destination />
+      <Activity />
+      <Hero
+        nom={accueilData.accueil.heroBas.compagnie}
+        title={accueilData.accueil.heroBas.titre}
+        description={accueilData.accueil.heroBas.sousTitre}
+        buttonText="Réservez votre voyage"
+        image="/images/plage-coucher-soleil.jpg"
+      />
+    </div>
+  );
+}
+
+/*import Hero from "@/components/blocks/Hero";
+import Destination from "@/components/blocks/Destinations";
+import Activity from "@/components/blocks/Activity";
+import About from "@/components/blocks/About";
+import { getAccueil } from "./api/graphQL";
 
 export default function App() {
+
   return (
     <div className="w-full">
       <Hero
@@ -24,3 +69,4 @@ export default function App() {
     </div>
   );
 }
+*/

@@ -6,6 +6,40 @@ export interface GetContactEmailResponse {
     email: string;
   };
 }
+
+export interface AccueilResponse {
+  accueil: {
+    heroHaut: {
+      compagnie: string;
+      sousTitre: string;
+      titre: string;
+    };
+    heroBas: {
+      compagnie: string;
+      sousTitre: string;
+      titre: string;
+    };
+    items: {
+      description: string;
+      image: {
+        url: string;
+      };
+      id: string;
+      titre: string;
+    }[];
+    lieu: {
+      id: string;
+      titre: string;
+      image: {
+        url: string;
+      };
+    }[];
+    presentation: {
+      titre: string;
+      description: string;
+    };
+  };
+}
 const endpoint = "https://graphql.datocms.com/";
 const apiToken = process.env.NEXT_PUBLIC_DATO_API_TOKEN;
 
@@ -38,4 +72,45 @@ export const getContactEmail = async (): Promise<GetContactEmailResponse> => {
     }
   `;
   return await client.request<GetContactEmailResponse>(GET_EMAILS);
+};
+
+export const getAccueil = async (): Promise<AccueilResponse> => {
+  const GET_DATA = gql`
+    query {
+      accueil {
+        heroHaut {
+          nom
+          compagnie
+          titre
+          sousTitre
+        }
+        heroBas {
+          nom
+          compagnie
+          sousTitre
+          titre
+        }
+        items {
+          description
+          image {
+            url
+          }
+          id
+          titre
+        }
+        lieu {
+          id
+          titre
+          image {
+            url
+          }
+        }
+        presentation {
+          titre
+          description
+        }
+      }
+    }
+  `;
+  return await client.request<AccueilResponse>(GET_DATA);
 };
