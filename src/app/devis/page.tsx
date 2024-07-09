@@ -14,8 +14,10 @@ import { Input } from "@/components/ui/input"; // Importation de l'input
 import { CalendarDaysIcon, TrashIcon } from "@/assets/icons";
 import { useRouter } from "next/navigation";
 import NumericStepper from "@/components/ui/numericStepper";
-import { activitiesDevis } from "@/lib/labels";
+import { activitiesDevis, activitiesDevis2 } from "@/lib/labels";
 import { de } from "date-fns/locale";
+import { getReservation } from "../api/graphQL";
+import Image from "next/image";
 
 export default function Devis() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
@@ -30,12 +32,26 @@ export default function Devis() {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [reservation, setReservation] = useState<any>([]);
 
-  const activities = activitiesDevis;
+  const activities = activitiesDevis2;
   const router = useRouter();
 
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      try {
+        const reservationData = await getReservation();
+        setReservation(reservationData.reservation.reservation);
+      } catch (error) {
+        console.error("Error fetching reservation data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const canSubmit =
     arrivalDate &&
@@ -75,10 +91,8 @@ export default function Devis() {
   };
 
   const calculateTotalPerActivity = (activity: string) => {
-    const activityDetails = activities.find(
-      (act: any) => act.name === activity,
-    );
-    return activityGuests[activity] * (activityDetails?.price || 0);
+    const activityDetails = activities.find((act: any) => act.nom === activity);
+    return activityGuests[activity] * (activityDetails?.prix || 0);
   };
 
   const calculateTotal = () => {
@@ -269,43 +283,43 @@ export default function Devis() {
       <div className="mt-6 grid gap-4">
         <Label htmlFor="activities">Activités</Label>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {activities.map((activity: any) => (
+          {reservation.map((activity: any) => (
             <div
-              key={activity.name}
+              key={activity.nom}
               className={`relative cursor-pointer rounded-lg border p-4 ${
-                selectedActivities.includes(activity.name)
+                selectedActivities.includes(activity.nom)
                   ? "border-blue-500"
                   : "border-gray-300"
               }`}
-              onClick={() => toggleActivity(activity.name)}
+              onClick={() => toggleActivity(activity.nom)}
             >
-              {activity.icon && (
-                <activity.icon
-                  className={`m-auto h-24 w-24 ${
-                    selectedActivities.includes(activity.name)
-                      ? "text-blue-500"
-                      : "text-blue-400"
-                  }`}
+              <div className="flex items-center justify-center">
+                <Image
+                  src={activity.image.url}
+                  alt={activity.image.alt}
+                  height={80}
+                  width={80}
+                  className="object-contain"
                 />
-              )}
+              </div>
               <div className="mt-2 flex w-full justify-center">
                 <input
                   type="checkbox"
-                  checked={selectedActivities.includes(activity.name)}
-                  onChange={() => toggleActivity(activity.name)}
+                  checked={selectedActivities.includes(activity.nom)}
+                  onChange={() => toggleActivity(activity.nom)}
                   className="form-checkbox h-5 w-5 text-blue-500"
                 />
               </div>
               <div className="mt-2 text-center">
-                <h3 className="text-lg font-bold">{activity.name}</h3>
+                <h3 className="text-lg font-bold">{activity.nom}</h3>
               </div>
               <div className="mt-1 flex justify-between px-16">
                 <span className="text-lg font-bold text-blue-500">Prix :</span>
-                <span className="text-lg">{`${activity.price} Eur`}</span>
+                <span className="text-lg">{`${activity.prix} Eur`}</span>
               </div>
               <div className="mt-1 flex justify-between px-16">
                 <span className="text-lg font-bold text-blue-500">Durée: </span>
-                <span className="text-lg">{`${activity.time} min`}</span>
+                <span className="text-lg">{`${activity.duree} min`}</span>
               </div>
             </div>
           ))}
@@ -354,7 +368,7 @@ export default function Devis() {
                   {activity}
                 </td>
                 <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
-                  {activities.find((act) => act.name === activity)!.price} €
+                  {activities.find((act) => act.nom === activity)!.prix} €
                 </td>
                 <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
                   <NumericStepper

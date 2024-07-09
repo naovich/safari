@@ -51,3 +51,48 @@ export const activitiesDevis = [
     icon: CanoeIcon,
   },
 ];
+
+export const activitiesDevis2 = [
+  {
+    nom: "Journée en mer",
+    image: "/images/dauphins.jpg",
+    duree: 60,
+    prix: 20,
+    icon: SeaIcon,
+  },
+  {
+    nom: "Ascension du karthala",
+    image: "/images/dauphins.jpg",
+    duree: 60,
+    prix: 20,
+    icon: MountainIcon,
+  },
+  {
+    nom: "Barbecue",
+    image: "/images/dauphins.jpg",
+    duree: 60,
+    prix: 20,
+    icon: BarbecueIcon,
+  },
+  {
+    nom: "Bouée tractée",
+    image: "/images/dauphins.jpg",
+    duree: 60,
+    prix: 20,
+    icon: BuoyIcon,
+  },
+  {
+    nom: "Paddle",
+    image: "/images/dauphins.jpg",
+    duree: 60,
+    prix: 20,
+    icon: PaddleIcon,
+  },
+  {
+    nom: "Canoë",
+    image: "/images/dauphins.jpg",
+    time: 30,
+    prix: 20,
+    icon: CanoeIcon,
+  },
+];

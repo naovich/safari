@@ -175,3 +175,32 @@ export const getProfil = async (): Promise<ProfilResponse> => {
   `;
   return await client.request<ProfilResponse>(GET_DATA);
 };
+
+interface ReservationProps {
+  reservation: {
+    duree: string;
+    id: string;
+    nom: string;
+    prix: string;
+  };
+}
+
+export const getReservation = async (): Promise<any> => {
+  const GET_DATA = gql`
+    query {
+      reservation {
+        reservation {
+          duree
+          id
+          nom
+          prix
+          image {
+            url
+            alt
+          }
+        }
+      }
+    }
+  `;
+  return await client.request<any>(GET_DATA);
+};
