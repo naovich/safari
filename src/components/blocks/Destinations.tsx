@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 export interface Items {
   id: string;
   titre: string;
-  description?: string; // ajout de description si nécessaire
+  description?: string;
   image: {
     url: string;
   };

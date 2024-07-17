@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -14,8 +14,6 @@ import { Input } from "@/components/ui/input"; // Importation de l'input
 import { CalendarDaysIcon, TrashIcon } from "@/assets/icons";
 import { useRouter } from "next/navigation";
 import NumericStepper from "@/components/ui/numericStepper";
-import { activitiesDevis, activitiesDevis2 } from "@/lib/labels";
-import { de } from "date-fns/locale";
 import { getReservation } from "../api/graphQL";
 import Image from "next/image";
 
@@ -34,13 +32,12 @@ export default function Devis() {
   const [phone, setPhone] = useState<string>("");
   const [reservation, setReservation] = useState<any>([]);
 
-  const activities = activitiesDevis2;
   const router = useRouter();
 
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       try {
         const reservationData = await getReservation();
@@ -91,7 +88,9 @@ export default function Devis() {
   };
 
   const calculateTotalPerActivity = (activity: string) => {
-    const activityDetails = activities.find((act: any) => act.nom === activity);
+    const activityDetails = reservation.find(
+      (act: any) => act.nom === activity,
+    );
     return activityGuests[activity] * (activityDetails?.prix || 0);
   };
 
@@ -368,7 +367,7 @@ export default function Devis() {
                   {activity}
                 </td>
                 <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
-                  {activities.find((act) => act.nom === activity)!.prix} €
+                  {reservation.find((act: any) => act.nom === activity)!.prix} €
                 </td>
                 <td className="whitespace-nowrap px-2 py-1 text-sm text-gray-500">
                   <NumericStepper
