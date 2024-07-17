@@ -18,7 +18,6 @@ export default async function App() {
 
   return (
     <div className="w-full">
-      {/*JSON.stringify(accueilData)*/}
       <Hero
         nom={accueilData.accueil.heroHaut.compagnie}
         title={accueilData.accueil.heroHaut.titre}
@@ -30,7 +29,6 @@ export default async function App() {
         title={accueilData.accueil.presentation.titre}
         description={accueilData.accueil.presentation.description}
       />
-      +
       <Destination Items={accueilData.accueil.lieu} />
       <Activity
         titre={accueilData.accueil.titreActivite}
